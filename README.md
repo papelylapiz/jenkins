@@ -75,4 +75,5 @@ En otras palabras, Ansible permite a los DevOps gestionar sus servidores, config
 Ansible gestiona sus diferentes nodos a través de SSH y únicamente requiere Python en el servidor remoto en el que se vaya a ejecutar para poder utilizarlo. Usa YAML para describir acciones a realizar y las configuraciones que se deben propagar a los diferentes nodos.(https://openwebinars.net/blog/que-es-ansible/)
 
 6.- Configuración de disparadores de eventos
+
 Gitlab -> jenkins
