@@ -5,12 +5,14 @@ Configuración de un servidor de automatización para integración continua y de
 
 Configuration server automatization for continuous integration and continuous deploy
 
+Entorno simulado en Mac OS
 Requisitos Básicos:
 
 - Docker
 - Docker-compose
+- Veracode
 
-Para este laboratorio se estará trabajando con los siguientes contenedores:
+Para este laboratorio se estaremos trabajando con los siguientes contenedores:
 
 1.- Jenkins con librerias de docker, ssh instaladas y ansible instaladas.
 2.- Gitlab o bitBucket (Se realizan ejemplos con ambos).
@@ -27,6 +29,35 @@ Primer paso:
 1.-Creación de contenedor de Gitlab
 
 En este contenedor mantendremos el control de cambios de nuestros proyectos.
+
+utilizaremos la siguiente definicion de propiedades en el archivo docker-compose:
+
+version: '3'
+services:
+   gitlab:
+     container_name: gitlab
+     image: 'gitlab/gitlab-ce:12.9.2-ce.0'
+     restart: unless-stopped
+     hostname: 'gitlab.example.com'
+     ports:
+       - '32895:80'
+       - '32896:443'
+       - '32897:22'
+     networks:
+      - unix
+networks:
+  unix:
+
+en primera instancia definimos la version "3" esto se refiere al fomato del archivo dependiendo de la version tendremos a disponibilidad de algunas propiedades o instrucciones, luego definimos el primer servicios "gitlab", como podran darse cuenta de forma explicita asignamos el nombre al contenedor, indicamos la imagen a partir de la cual se construida el contenedor, indicamos en que momento el contenedor dejara de estar encendido, el nombre del hostname mediante el cual se podra acceder via web, los puertos de a que permitiran el acceso y la red, este definimos un puente llamado "unix" la cual permitira la comunicacion con los diferentes servicios que levantaremos.
+
+
+
+docker-compose up -d
+
+
+
+Referencia: https://docs.gitlab.com/omnibus/docker/
+
 
 2.-Creación de Dokerfile para el contenedor que almacenará nuestras imagenes.
 
@@ -77,3 +108,17 @@ Ansible gestiona sus diferentes nodos a través de SSH y únicamente requiere Py
 6.- Configuración de disparadores de eventos
 
 Gitlab -> jenkins
+
+WorkFlow:
+Change application source code.
+Commit application code and Web Apps web.config file.
+Continuous integration triggers application build and unit tests.
+Continuous deployment trigger orchestrates deployment of application artifacts with environment-specific parameters.
+Deployment to Web Apps.
+Azure Application Insights collects and analyzes health, performance, and usage data.
+Review health, performance, and usage information.
+Update backlog item.
+
+
+
+La integración continua es una práctica de desarrollo de software mediante la cual los desarrolladores combinan los cambios en el código en un repositorio central de forma periódica, tras lo cual se ejecutan versiones y pruebas automáticas

@@ -1,0 +1,26 @@
+version: '3.3'
+services:
+  jenkins:
+    build: ./dockerfiles
+    container_name: jenkins_ci
+    image: jenkins-ansible
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - $PWD/servers/jenkins_home:/var/jenkins_home
+    networks:
+      - unix
+  gitlab:
+    container_name: gitlab
+    image: 'gitlab/gitlab-ce:12.9.2-ce.0'
+    restart: unless-stopped
+    hostname: 'gitlab.example.com'
+    ports:
+      - '32895:80'
+      - '32896:443'
+      - '32897:22'
+    networks:
+      - unix
+networks:
+  unix:
